@@ -783,7 +783,7 @@ var logs = (function () {
     init = function () {
         var el = document.getElementById('alertify-logs-container');
         if(!el){ 
-            element.create("section", { classes: Alertify._prefix + "-logs" });
+            el = element.create("section", { classes: Alertify._prefix + "-logs" });
             document.body.appendChild(el);
         }
         element.ready(el);

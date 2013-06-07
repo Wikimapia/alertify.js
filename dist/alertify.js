@@ -781,8 +781,11 @@ var logs = (function () {
      * @return {Object} Log holder element
      */
     init = function () {
-        var el = element.create("section", { classes: Alertify._prefix + "-logs" });
-        document.body.appendChild(el);
+        var el = document.getElementById('alertify-logs-container');
+        if(!el){ 
+            element.create("section", { classes: Alertify._prefix + "-logs" });
+            document.body.appendChild(el);
+        }
         element.ready(el);
         return el;
     };

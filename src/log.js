@@ -1,11 +1,11 @@
-define(["alertify", "validate", "element", "transition"], function (Alertify, validate, element, transition) {
+define(["alertify", "validate", "element", "transition"], function(Alertify, validate, element, transition) {
     "use strict";
 
     var Log,
         onTransitionEnd,
         remove,
         startTimer,
-        prefix  = Alertify._prefix + "-log",
+        prefix = Alertify._prefix + "-log",
         clsShow = prefix + " is-" + prefix + "-showing",
         clsHide = prefix + " is-" + prefix + "-hidden";
 
@@ -17,18 +17,15 @@ define(["alertify", "validate", "element", "transition"], function (Alertify, va
      * @param {String} msg    Log message
      * @param {Number} delay  [Optional] Delay in ms
      */
-    Log = function (parent, type, msg, delay) {
-        if (!validate.isObject(parent) ||
-            !validate.isString(type) ||
-            !validate.isString(msg) ||
-            !validate.isNumber(delay, true)) {
+    Log = function(parent, type, msg, delay) {
+        if (!validate.isObject(parent) || !validate.isString(type) || !validate.isString(msg) || !validate.isNumber(delay, true)) {
             throw new Error(validate.messages.invalidArguments);
         }
 
-        this.delay  = (typeof delay !== "undefined") ? delay : 5000;
-        this.msg    = msg;
+        this.delay = (typeof delay !== "undefined") ? delay : 5000;
+        this.msg = msg;
         this.parent = parent;
-        this.type   = type;
+        this.type = type;
         this.create();
         this.show();
     };
@@ -40,7 +37,7 @@ define(["alertify", "validate", "element", "transition"], function (Alertify, va
      * @param  {Event} event Event
      * @return {undefined}
      */
-    onTransitionEnd = function (event) {
+    onTransitionEnd = function(event) {
         event.stopPropagation();
         if (typeof this.el !== "undefined") {
             Alertify.off(this.el, transition.type, this.fn);
@@ -54,7 +51,7 @@ define(["alertify", "validate", "element", "transition"], function (Alertify, va
      *
      * @return {undefined}
      */
-    remove = function () {
+    remove = function() {
         this.parent.removeChild(this.el);
         delete this.el;
     };
@@ -64,10 +61,10 @@ define(["alertify", "validate", "element", "transition"], function (Alertify, va
      *
      * @return {undefined}
      */
-    startTimer = function () {
+    startTimer = function() {
         var that = this;
         if (this.delay !== 0) {
-            setTimeout(function () {
+            setTimeout(function() {
                 that.close();
             }, this.delay);
         }
@@ -81,11 +78,11 @@ define(["alertify", "validate", "element", "transition"], function (Alertify, va
      *
      * @return {undefined}
      */
-    Log.prototype.close = function () {
+    Log.prototype.close = function() {
         var that = this;
         if (typeof this.el !== "undefined" && this.el.parentNode === this.parent) {
             if (transition.supported) {
-                this.fn = function (event) {
+                this.fn = function(event) {
                     onTransitionEnd.call(that, event);
                 };
                 Alertify.on(this.el, transition.type, this.fn);
@@ -103,12 +100,12 @@ define(["alertify", "validate", "element", "transition"], function (Alertify, va
      *
      * @return {undefined}
      */
-    Log.prototype.create = function () {
+    Log.prototype.create = function() {
         if (typeof this.el === "undefined") {
             var el = element.create("article", {
                 classes: clsHide + " " + prefix + "-" + this.type
             });
-            el.innerHTML = this.msg;
+            el.innerHTML = '<span class="close">&times;</span>' + this.msg;
             this.parent.appendChild(el);
             element.ready(el);
             this.el = el;
@@ -121,12 +118,12 @@ define(["alertify", "validate", "element", "transition"], function (Alertify, va
      *
      * @return {undefined}
      */
-    Log.prototype.show = function () {
+    Log.prototype.show = function() {
         var that = this;
         if (typeof this.el === "undefined") {
             return;
         }
-        Alertify.on(this.el, "click", function () {
+        Alertify.on(this.el, "click", function() {
             that.close();
         });
         this.el.className = clsShow + " " + prefix + "-" + this.type;
